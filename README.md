@@ -1,1 +1,3 @@
-# co2_detector
+# CO2 detector
+
+Based on https://github.com/melkati/CO2-Gadget
