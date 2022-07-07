@@ -21,10 +21,20 @@ void initDisplay() {
   tft.setTextSize(2);
 }
 
-void showCO2(uint16_t co2) {
+void showCO2(uint16_t lastCo2, uint16_t co2) {
   if (co2 > 9999) {
     co2 = 9999;
   }
+  
+  tft.setTextSize(1);
+  tft.setTextDatum(BR_DATUM);
+  tft.setFreeFont(FF95);
+  
+  if (lastCo2 > co2) {
+    tft.setTextColor(TFT_BLACK, TFT_BLACK);
+    tft.drawString(String(lastCo2), tft.width() - 39, 112);
+  }
+   
   if (co2 >= CO2_RED_RANGE) {
     tft.setTextColor(TFT_RED, TFT_BLACK);
   } else if (co2 >= CO2_ORANGE_RANGE) {
@@ -32,10 +42,7 @@ void showCO2(uint16_t co2) {
   } else {
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
   }
-
-  tft.setTextSize(1);
-  tft.setTextDatum(BR_DATUM);
-  tft.setFreeFont(FF95);
+  
   tft.drawString(String(co2), tft.width() - 39, 112);
 
   tft.setTextDatum(BR_DATUM);
@@ -63,7 +70,7 @@ void showHumidity(float hum) {
     tft.setTextColor(TFT_WHITE, TFT_RED);
   } else if (hum < 40) {
     tft.setTextColor(TFT_ORANGE, TFT_BLACK);
-  }  else if (hum <= 60) {
+  } else if (hum <= 60) {
     tft.setTextColor(TFT_LIGHTGREY, TFT_BLACK);
   } else if (hum < 75) {
     tft.setTextColor(TFT_SKYBLUE, TFT_BLACK);
@@ -77,7 +84,7 @@ void showHumidity(float hum) {
   tft.drawString(String(hum, 0) + "%", tft.width() - 5, tft.height()) - 2;
 }
 
-void showWiFiIcon(int32_t posX, int32_t posY) {
+void showWiFiIcon(bool activeWIFI, int32_t posX, int32_t posY) {
   int8_t rssi = WiFi.RSSI();
   tft.drawRoundRect(posX - 2, posY - 2, 16 + 4, 16 + 4, 2, TFT_DARKGREY);
   if (!activeWIFI) {
@@ -94,4 +101,25 @@ void showWiFiIcon(int32_t posX, int32_t posY) {
       tft.drawBitmap(posX, posY, iconWiFiLow, 16, 16, TFT_BLACK, TFT_RED);
     }
   }
+}
+
+void showMQTTIcon(int32_t posX, int32_t posY) {
+  tft.drawRoundRect(posX - 2, posY - 2, 16 + 4, 16 + 4, 2, TFT_DARKGREY);
+  if (!activeMQTT) {
+    tft.drawBitmap(posX - 1, posY - 1, iconMQTT, 16, 16, TFT_BLACK, TFT_DARKGREY);
+  } else {
+    tft.drawBitmap(posX - 1, posY - 1, iconMQTT, 16, 16, TFT_BLACK, TFT_CYAN);
+  }
+}
+
+void showInfo(int32_t posX, int32_t posY, String data) {
+  tft.setTextColor(TFT_WHITE, TFT_BLACK);
+  tft.setTextSize(1);
+  tft.setSwapBytes(true);
+  tft.drawString(data, posX, posY);
+}
+
+
+void showTime(String time) {
+  showInfo(tft.width() - 20, 25, time);
 }
