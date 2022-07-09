@@ -115,11 +115,12 @@ void showMQTTIcon(int32_t posX, int32_t posY) {
 void showInfo(int32_t posX, int32_t posY, String data) {
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
   tft.setTextSize(1);
+  tft.setTextDatum(TR_DATUM);
   tft.setSwapBytes(true);
   tft.drawString(data, posX, posY);
 }
 
 
 void showTime(String time) {
-  showInfo(tft.width() - 20, 25, time);
+  showInfo(tft.width() - 15, 5, time);
 }
