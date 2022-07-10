@@ -66,7 +66,7 @@ void publishMQTT() {
   if (activeWIFI && activeMQTT && mqttClient.connected() && (millis() - lastTimeMQTTPublished >= TIME_BETWEEN_MQTT_PUBLISH * 1000)) {
     publishIntMQTT("/co2", co2);
     publishFloatMQTT("/temp", temp);
-    publishFloatMQTT("/humi", hum);
+    publishFloatMQTT("/hum", hum);
     lastTimeMQTTPublished = millis();
   }
 }

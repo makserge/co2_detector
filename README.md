@@ -20,7 +20,7 @@ co2detector/co2
 
 co2detector/temp
 
-co2detector/humi
+co2detector/hum
 
 
 for CO2, temperature and humidity.
