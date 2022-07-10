@@ -27,7 +27,7 @@ void initWifi() {
   //automatically connect using saved credentials if they exist
   //If connection fails it starts an access point with the specified name
   if (wm.autoConnect("CO2 sensor")){
-      Serial.println("connected...yeey :)");
+      Serial.println("connected...");
   } else {
       Serial.println("Configportal running");
   }

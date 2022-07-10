@@ -105,10 +105,10 @@ void showWiFiIcon(bool activeWIFI, int32_t posX, int32_t posY) {
 
 void showMQTTIcon(int32_t posX, int32_t posY) {
   tft.drawRoundRect(posX - 2, posY - 2, 16 + 4, 16 + 4, 2, TFT_DARKGREY);
-  if (!activeMQTT) {
-    tft.drawBitmap(posX - 1, posY - 1, iconMQTT, 16, 16, TFT_BLACK, TFT_DARKGREY);
-  } else {
+  if (activeMQTT) {
     tft.drawBitmap(posX - 1, posY - 1, iconMQTT, 16, 16, TFT_BLACK, TFT_CYAN);
+  } else {
+    tft.drawBitmap(posX - 1, posY - 1, iconMQTT, 16, 16, TFT_BLACK, TFT_DARKGREY);
   }
 }
 

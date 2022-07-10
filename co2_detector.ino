@@ -7,8 +7,19 @@
 
 #define HOSTNAME "co2detector"   // http://co2detector.local
 
-bool activeWIFI = false;
-bool activeMQTT = false;
+#define MQTT_BROKER "192.168.8.108"
+#define MQTT_CLIENT_ID "co2detector"
+#define MQTT_USER ""
+#define MQTT_PASS ""
+#define MQTT_ROOT_TOPIC "co2detector"
+
+#define START_CHECKING_AFTER 5000 //5s
+
+bool activeWIFI, activeMQTT, newReadingsAvailable;
+
+uint16_t co2, lastCo2;
+float temp, hum, lastTemp, lastHum;
+int64_t lastReadingsCommunicationTime;
 
 void showWiFiIcon(bool activeWIFI, int32_t posX, int32_t posY);
 
@@ -16,15 +27,8 @@ void showWiFiIcon(bool activeWIFI, int32_t posX, int32_t posY);
 #include "include/TFT.h"
 #include "include/Sensor.h"
 #include "include/Clock.h"
-
-uint16_t co2 = 0;
-float temp = 0.0;
-float hum = 0.0;
-
+#include "include/MQTT.h"
 #include "include/Web.h"
-
-uint16_t lastCo2;
-float lastTemp, lastHum;
 
 void setup() {
   Serial.begin(115200);
@@ -35,24 +39,37 @@ void setup() {
   initWifi();
   if (activeWIFI) {
     initWeb();
+    initMQTT();
   }
 }
 
 void loop() {
+  mqttClientLoop();
   processWifi();
-  readSensor(co2, temp, hum);
+  if ((millis() - lastReadingsCommunicationTime >= START_CHECKING_AFTER)) {
+    lastReadingsCommunicationTime = millis();
+
+    readSensor(co2, temp, hum);
+    showMQTTIcon(30, 3);
+    showClock();
+  }
   if (lastCo2 != co2) {
     showCO2(lastCo2, co2);
     lastCo2 = co2;
+    newReadingsAvailable = true;
   }  
   if (lastTemp != temp) {
     lastTemp = temp;
     showTemperature(temp);
+    newReadingsAvailable = true;
   }
   if (lastHum != hum) {
     lastHum = hum;
     showHumidity(hum);
-  } 
-  showClock();
-  delay(5000);
+    newReadingsAvailable = true;
+  }
+  if (newReadingsAvailable) {
+    newReadingsAvailable = false;
+    publishMQTT();
+  }
 }
