@@ -14,11 +14,9 @@ void initDisplay() {
   pinMode(BACKLIGHT_PIN, OUTPUT);
   ledcSetup(0, 5000, 8);
   ledcAttachPin(BACKLIGHT_PIN, 0);
-  ledcWrite(0, 255);
   tft.init();
   tft.setRotation(1);
   tft.fillScreen(TFT_BLACK);
-  tft.setTextSize(2);
 }
 
 void showCO2(uint16_t lastCo2, uint16_t co2) {
@@ -123,4 +121,8 @@ void showInfo(int32_t posX, int32_t posY, String data) {
 
 void showTime(String time) {
   showInfo(tft.width() - 15, 5, time);
+}
+
+void setBrightness() {
+  ledcWrite(0, (hours > HIGH_BRIGTNESS_HOUR && hours < LOW_BRIGTNESS_HOUR) ? BRIGHTNESS_HIGH : BRIGHTNESS_LOW);
 }

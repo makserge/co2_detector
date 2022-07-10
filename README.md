@@ -25,6 +25,3 @@ co2detector/humi
 
 for CO2, temperature and humidity.
 
-##License
-
-This code is released under the GPL-3.0 license.

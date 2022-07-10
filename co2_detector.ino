@@ -15,11 +15,18 @@
 
 #define START_CHECKING_AFTER 5000 //5s
 
+#define LOW_BRIGTNESS_HOUR 22
+#define HIGH_BRIGTNESS_HOUR 7
+
+#define BRIGHTNESS_LOW 20
+#define BRIGHTNESS_HIGH 255
+
 bool activeWIFI, activeMQTT, newReadingsAvailable;
 
 uint16_t co2, lastCo2;
 float temp, hum, lastTemp, lastHum;
 int64_t lastReadingsCommunicationTime;
+int32_t hours;
 
 void showWiFiIcon(bool activeWIFI, int32_t posX, int32_t posY);
 
@@ -52,6 +59,7 @@ void loop() {
     readSensor(co2, temp, hum);
     showMQTTIcon(30, 3);
     showClock();
+    setBrightness();
   }
   if (lastCo2 != co2) {
     showCO2(lastCo2, co2);

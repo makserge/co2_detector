@@ -14,6 +14,10 @@ void initClock() {
 void showClock() {
   time(&now);
   localtime_r(&now, &tm);
+  if (tm.tm_year == 70) {
+    return;
+  }
+  hours = tm.tm_hour;
   char buf[20];
   sprintf(buf, "%02d:%02d %02d/%02d/%d", tm.tm_hour, tm.tm_min, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
   showTime(buf);
