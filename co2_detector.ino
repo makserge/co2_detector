@@ -7,10 +7,10 @@
 
 #define HOSTNAME "co2detector"   // http://co2detector.local
 
-#define MQTT_BROKER "192.168.8.108"
+#define CONFIG_FILE "/config.json"
+#define MQTT_BROKER "192.168.8.100"
+#define MQTT_PORT "1883"
 #define MQTT_CLIENT_ID "co2detector"
-#define MQTT_USER ""
-#define MQTT_PASS ""
 #define MQTT_ROOT_TOPIC "co2detector"
 
 #define START_CHECKING_AFTER 5000 //5s
@@ -19,7 +19,7 @@
 #define HIGH_BRIGTNESS_HOUR 7
 
 #define BRIGHTNESS_LOW 20
-#define BRIGHTNESS_HIGH 255
+#define BRIGHTNESS_HIGH 150
 
 bool activeWIFI, activeMQTT, newReadingsAvailable;
 

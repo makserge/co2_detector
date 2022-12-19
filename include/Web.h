@@ -1,6 +1,4 @@
 #include <ESPmDNS.h>
-#include <SPIFFS.h>
-
 #define HTTP_SERVICE "http"
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>

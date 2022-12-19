@@ -17,14 +17,14 @@ void mqttReconnect() {
     timeStamp = millis();
     if (!mqttClient.connected()) {
       Serial.printf("-->[MQTT] Attempting MQTT connection... ");
-      // Attempt to connect            
-      if (mqttClient.connect(MQTT_CLIENT_ID, MQTT_USER, MQTT_PASS)) {
+      // Attempt to connect     
+	    if (mqttClient.connect(MQTT_CLIENT_ID, mqttUser, mqttPass)) {
         activeMQTT = true;
         Serial.printf("connected\n");
       } else {
         ++connectionRetries;
         mqttClient.setSocketTimeout(2); //Drop timeout to 2 secs for subsecuents tries
-        Serial.printf(" not possible to connect to %s ", MQTT_BROKER);
+        Serial.printf(" not possible to connect to %s ", mqttBroker);
         Serial.printf("Connection status:  %d. (%d of %d retries)\n", mqttClient.state(), connectionRetries, MAX_CONNECTION_RETRIES); // Possible States: https://pubsubclient.knolleary.net/api#state
         if (connectionRetries >= MAX_CONNECTION_RETRIES) {
           enableMQTT = false;
@@ -38,7 +38,7 @@ void mqttReconnect() {
 void publishIntMQTT(String topic, int16_t payload) {
   char charPublish[20];
   dtostrf(payload, 0, 0, charPublish);
-  topic = MQTT_ROOT_TOPIC + topic;
+  topic = mqttRootTopic + topic;
   Serial.printf("-->[MQTT] Publishing %d to ", payload);
   Serial.println("topic: " + topic);
   mqttClient.publish((topic).c_str(), charPublish);
@@ -47,7 +47,7 @@ void publishIntMQTT(String topic, int16_t payload) {
 void publishFloatMQTT(String topic, float payload) {
   char charPublish[20];
   dtostrf(payload, 0, 2, charPublish);
-  topic = MQTT_ROOT_TOPIC + topic;
+  topic = mqttRootTopic + topic;
   Serial.printf("-->[MQTT] Publishing %.0f to ", payload);
   Serial.println("topic: " + topic);
   mqttClient.publish((topic).c_str(), charPublish);
@@ -57,8 +57,8 @@ void initMQTT() {
   if (mqttClient.connected()) {
     mqttClient.disconnect();
   }
-  Serial.printf("-->[MQTT] Initializing MQTT to broker IP: %s\n", MQTT_BROKER);
-  mqttClient.setServer(MQTT_BROKER, 1883);
+  Serial.printf("-->[MQTT] Initializing MQTT to broker IP: %s\n", mqttBroker);
+  mqttClient.setServer(mqttBroker, atol(mqttPort));
   mqttReconnect();
 }
 
